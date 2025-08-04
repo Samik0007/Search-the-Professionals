@@ -1,0 +1,123 @@
+/* login.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1e90ff, #87cefa);
+}
+
+.login-form {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 50px 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.login-form h2 {
+    margin: 0;
+    font-size: 30px;
+    text-align: center;
+    font-weight: 600;
+    color: #111;
+}
+
+/* Form group with floating label */
+.form-group {
+    position: relative;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 16px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    padding: 0 4px;
+    color: #888;
+    font-size: 16px;
+    transition: 0.2s ease all;
+    pointer-events: none;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 13px;
+    color: #111;
+}
+
+/* Button styles */
+.login-form button {
+    background-color: #111;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: #333;
+}
+
+/* Switch between login/register */
+.login-form p {
+    text-align: center;
+    font-size: 14px;
+    color: #444;
+}
+
+.login-form p span {
+    color:rgb(145, 145, 177);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.login-form p span:hover {
+    text-decoration: underline;
+}
+
+/* Fade-in */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .login-form {
+        padding: 30px 20px;
+    }
+}
