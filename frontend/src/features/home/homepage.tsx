@@ -107,7 +107,12 @@ const Homepage: React.FC = () => {
             <button className="nav-button">My Network</button>
             <button className="nav-button">Jobs</button>
             <button className="nav-button">Messaging</button>
-
+            <button 
+              className="nav-button"
+              onClick={() => window.location.href = "/profile"}
+            >
+              Profile
+            </button>
             
             <button
               className="nav-button logout-button"

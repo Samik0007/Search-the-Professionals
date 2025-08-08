@@ -5,6 +5,7 @@ import Login from './features/login/login';
 import Homepage from './features/home/homepage';
 import LoginGuard from './shared/guards/loginGuards';
 import Register from './features/register/register'; 
+import Profile from './features/profile/profile';
 
 function App() {
   return (
@@ -30,6 +31,12 @@ function App() {
           path="/home"
           element={
             localStorage.getItem('currentuser') ? <Homepage /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            localStorage.getItem('currentuser') ? <Profile /> : <Navigate to="/" />
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
