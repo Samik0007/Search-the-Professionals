@@ -106,6 +106,37 @@
     margin: 0;
 }
 
+/* Edit name section */
+.edit-name-section {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.edit-username-input {
+    width: 100%;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a202c;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: white;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.edit-username-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.edit-username-input.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Dropdown styles */
 .dropdown-container {
     position: relative;
 }
@@ -169,6 +200,7 @@
     border-radius: 0 0 12px 12px;
 }
 
+/* User details section */
 .user-details {
     margin-bottom: 30px;
 }
@@ -180,20 +212,51 @@
     background: #f8fafc;
     border-radius: 12px;
     border-left: 4px solid #667eea;
+    align-items: flex-start;
 }
 
 .detail-label {
     font-weight: 600;
     color: #4a5568;
-    min-width: 80px;
+    min-width: 100px;
     margin-right: 15px;
+    flex-shrink: 0;
 }
 
 .detail-value {
     color: #2d3748;
     font-weight: 500;
+    flex: 1;
 }
 
+/* Edit input styles */
+.detail-edit-section {
+    flex: 1;
+}
+
+.detail-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.detail-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.detail-input.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* About/Bio section */
 .about-section {
     margin-bottom: 30px;
 }
@@ -216,10 +279,126 @@
     border-left: 4px solid #667eea;
 }
 
+/* Bio editing */
+.bio-edit-section {
+    margin-bottom: 5px;
+}
+
+.bio-textarea {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    background: white;
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+    line-height: 1.6;
+    margin-bottom: 5px;
+}
+
+.bio-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.bio-textarea.error {
+    border-color: #e53e3e;
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Error text styles */
+.error-text {
+    color: #e53e3e;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 4px;
+    display: block;
+}
+
+/* Profile actions */
 .profile-actions {
     display: flex;
     justify-content: center;
     gap: 15px;
+    flex-wrap: wrap;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Button styles */
+.edit-profile-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.edit-profile-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.save-button {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.save-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+}
+
+.save-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.cancel-button {
+    background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(160, 174, 192, 0.3);
+}
+
+.cancel-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(160, 174, 192, 0.4);
+}
+
+.cancel-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .logout-button {
@@ -238,6 +417,25 @@
 .logout-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
+}
+
+/* Loading state for save button */
+.save-button:disabled {
+    position: relative;
+}
+
+.save-button:disabled::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 /* Animations */
@@ -263,6 +461,11 @@
     }
 }
 
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .profile-container {
@@ -278,7 +481,8 @@
         padding: 30px 20px;
     }
     
-    .user-name {
+    .user-name,
+    .edit-username-input {
         font-size: 24px;
     }
     
@@ -291,6 +495,11 @@
     .name-section {
         flex-direction: column;
         gap: 15px;
+        align-items: stretch;
+    }
+    
+    .edit-name-section {
+        margin-right: 0;
     }
     
     .dropdown-container {
@@ -299,12 +508,26 @@
     
     .detail-item {
         flex-direction: column;
-        gap: 5px;
+        gap: 8px;
     }
     
     .detail-label {
         min-width: auto;
         margin-right: 0;
+    }
+    
+    .profile-actions,
+    .edit-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .edit-profile-button,
+    .save-button,
+    .cancel-button,
+    .logout-button {
+        width: 100%;
+        max-width: 250px;
     }
 }
 
@@ -329,4 +552,9 @@
         height: 80px;
         font-size: 28px;
     }
-} 
+    
+    .detail-input,
+    .bio-textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}

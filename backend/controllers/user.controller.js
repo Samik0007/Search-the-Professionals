@@ -2,8 +2,10 @@ import User from '../models/user.model.js';
 
 export async function getUserList(req, res) {
     try {
-        // Always return sample data with proper names and roles
-        const users = [
+        const { search, category } = req.query;
+        
+        // Sample users data
+        let users = [
             {
                 _id: '1',
                 username: 'Satish',
@@ -77,9 +79,35 @@ export async function getUserList(req, res) {
                 company: 'StrategyCorp'
             }
         ];
-        
-        res.status(200).json({ users });
+
+        // Apply category filter
+        if (category && category !== 'All') {
+            users = users.filter(user => 
+                user.role && user.role.toLowerCase() === category.toLowerCase()
+            );
+        }
+
+        // Apply search filter
+        if (search && search.trim()) {
+            const searchTerm = search.toLowerCase().trim();
+            users = users.filter(user =>
+                (user.username && user.username.toLowerCase().includes(searchTerm)) ||
+                (user.role && user.role.toLowerCase().includes(searchTerm)) ||
+                (user.company && user.company.toLowerCase().includes(searchTerm))
+            );
+        }
+
+        res.status(200).json({ 
+            users,
+            totalCount: users.length,
+            searchTerm: search || '',
+            category: category || 'All'
+        });
     } catch (e) {
-        res.status(500).json({ message: 'Error fetching users', error: e });
+        console.error('Error fetching users:', e);
+        res.status(500).json({ 
+            message: 'Error fetching users', 
+            error: e.message 
+        });
     }
-} 
+}

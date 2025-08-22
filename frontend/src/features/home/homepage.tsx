@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getUserListApi } from "../../shared/config/api";
 import './homepage.css';
 
@@ -8,6 +8,13 @@ interface User {
   username: string;
   role: string;
   company: string;
+}
+
+interface ApiResponse {
+  users: User[];
+  totalCount: number;
+  searchTerm: string;
+  category: string;
 }
 
 const categories = [
@@ -21,33 +28,58 @@ const categories = [
 
 const Homepage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentUser, setCurrentUser] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
 
-  useEffect(() => {
-    // Fetch user list from API
+  // Debounce function to avoid too many API calls while typing
+  const useDebounce = (value: string, delay: number) => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  };
+
+  const debouncedSearch = useDebounce(search, 300); // 300ms delay
+
+  // Memoized fetch function
+  const fetchUsers = useCallback(async (searchTerm: string, category: string) => {
     setLoading(true);
     setError(null);
     
-    getUserListApi()
-      .then((res) => {
-        const userData = res.data.users || [];
-        setUsers(userData);
-        setFilteredUsers(userData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching users:', err);
-        setError('Failed to load users. Please try again.');
-        setUsers([]);
-        setFilteredUsers([]);
-        setLoading(false);
+    try {
+      const response = await getUserListApi({
+        search: searchTerm,
+        category: category
       });
+      
+      const data: ApiResponse = response.data;
+      setUsers(data.users || []);
+      setTotalCount(data.totalCount || 0);
+    } catch (err: any) {
+      console.error('Error fetching users:', err);
+      setError('Failed to load users. Please try again.');
+      setUsers([]);
+      setTotalCount(0);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
+  // Initial load
+  useEffect(() => {
     // Get current user from localStorage
     const userStr = localStorage.getItem('currentuser');
     if (userStr) {
@@ -58,32 +90,25 @@ const Homepage: React.FC = () => {
         setCurrentUser('');
       }
     }
-  }, []);
+    
+    // Initial fetch
+    fetchUsers('', 'All');
+  }, [fetchUsers]);
 
+  // Fetch when search or category changes
   useEffect(() => {
-    let filtered = users;
-    
-    // Apply category filter
-    if (selectedCategory !== 'All') {
-      filtered = filtered.filter((u) => 
-        u.role && u.role.toLowerCase() === selectedCategory.toLowerCase()
-      );
-    }
-    
-    // Apply search filter
-    if (search.trim()) {
-      const searchTerm = search.toLowerCase().trim();
-      filtered = filtered.filter((u) =>
-        (u.username && u.username.toLowerCase().includes(searchTerm)) ||
-        (u.role && u.role.toLowerCase().includes(searchTerm)) ||
-        (u.company && u.company.toLowerCase().includes(searchTerm))
-      );
-    }
-    
-    setFilteredUsers(filtered);
-  }, [search, selectedCategory, users]);
+    fetchUsers(debouncedSearch, selectedCategory);
+  }, [debouncedSearch, selectedCategory, fetchUsers]);
 
-  if (loading) {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+  };
+
+  if (loading && users.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-300 flex items-center justify-center">
         <div className="text-center">
@@ -132,14 +157,14 @@ const Homepage: React.FC = () => {
               placeholder="Search by name, role, or company..."
               className="search-input"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={handleSearchChange}
             />
             <div className="category-buttons">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   className={`category-button ${selectedCategory === cat ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => handleCategoryChange(cat)}
                 >
                   {cat}
                 </button>
@@ -157,17 +182,36 @@ const Homepage: React.FC = () => {
           ) : (
             <>
               <div className="result-count">
-                {filteredUsers.length} result{filteredUsers.length !== 1 ? 's' : ''} found
+                {loading ? (
+                  <span className="flex items-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></div>
+                    Searching...
+                  </span>
+                ) : (
+                  `${totalCount} result${totalCount !== 1 ? 's' : ''} found`
+                )}
+                {(debouncedSearch || selectedCategory !== 'All') && (
+                  <span className="ml-2 text-sm text-gray-500">
+                    {debouncedSearch && `for "${debouncedSearch}"`}
+                    {debouncedSearch && selectedCategory !== 'All' && ' '}
+                    {selectedCategory !== 'All' && `in ${selectedCategory}`}
+                  </span>
+                )}
               </div>
               
-              {filteredUsers.length === 0 ? (
+              {!loading && users.length === 0 ? (
                 <div className="empty-state">
                   <h3>No users found</h3>
-                  <p>Try adjusting your search or filter criteria.</p>
+                  <p>
+                    {debouncedSearch || selectedCategory !== 'All' 
+                      ? 'Try adjusting your search or filter criteria.'
+                      : 'No users are available at the moment.'
+                    }
+                  </p>
                 </div>
               ) : (
                 <div className="user-card-grid">
-                  {filteredUsers.map((user) => (
+                  {users.map((user) => (
                     <div
                       key={user._id}
                       className="user-card"
