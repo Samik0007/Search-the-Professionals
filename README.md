@@ -53,7 +53,7 @@ MongoDB: Running instance (local or cloud)
 npm package manager
 
 Clone the Repository
-git clone 
+git clone https://github.com/Samik0007/Search-the-Professionals.git
 
 cd Search-the-Professionals
 
