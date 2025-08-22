@@ -18,3 +18,4 @@ const LoginGuard = ({ children }: LoginGuardProps): JSX.Element => {
 };
 
 export default LoginGuard;
+

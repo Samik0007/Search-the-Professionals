@@ -2,12 +2,14 @@ import { useEffect, useState, useCallback } from "react";
 import { getUserListApi } from "../../shared/config/api";
 import './homepage.css';
 
-// User type definition
+// User type definition with extended properties
 interface User {
   _id: string;
   username: string;
   role: string;
   company: string;
+  location?: string;
+  description?: string;
 }
 
 interface ApiResponse {
@@ -17,6 +19,68 @@ interface ApiResponse {
   category: string;
 }
 
+// Nepal locations array
+const nepalLocations = [
+  'Kathmandu', 'Pokhara', 'Lalitpur', 'Bhaktapur', 'Biratnagar',
+  'Birgunj', 'Dharan', 'Butwal', 'Hetauda', 'Janakpur',
+  'Chitwan', 'Itahari', 'Nepalgunj', 'Dhangadhi', 'Tulsipur',
+  'Ghorahi', 'Damak', 'Bharatpur', 'Lumbini', 'Palpa'
+];
+
+// Role-based descriptions
+const roleDescriptions: Record<string, string[]> = {
+  'Designer': [
+    'A creative visual designer specializing in modern UI/UX design',
+    'An innovative graphic designer with expertise in brand identity',
+    'A talented web designer creating stunning digital experiences',
+    'A skilled product designer focused on user-centered solutions'
+  ],
+  'Developer': [
+    'A full-stack developer building scalable web applications',
+    'A passionate software engineer specializing in modern frameworks',
+    'An experienced backend developer creating robust APIs',
+    'A frontend specialist crafting beautiful user interfaces'
+  ],
+  'Photographer': [
+    'A professional photographer capturing life\'s precious moments',
+    'A creative visual storyteller specializing in portrait photography',
+    'An experienced wedding photographer with artistic flair',
+    'A commercial photographer focused on brand imagery'
+  ],
+  'Marketer': [
+    'A digital marketing expert driving growth through data-driven strategies',
+    'A social media specialist building engaging brand communities',
+    'A content marketing professional creating compelling narratives',
+    'A performance marketing expert optimizing campaigns for ROI'
+  ],
+  'Consultant': [
+    'A business consultant helping companies achieve strategic goals',
+    'A management expert providing operational excellence solutions',
+    'A strategy consultant specializing in digital transformation',
+    'A process improvement specialist optimizing business workflows'
+  ]
+};
+
+// Function to get random Nepal location
+const getRandomLocation = (): string => {
+  return nepalLocations[Math.floor(Math.random() * nepalLocations.length)];
+};
+
+// Function to get random description based on role
+const getRoleDescription = (role: string): string => {
+  const descriptions = roleDescriptions[role] || ['A dedicated professional contributing to their field'];
+  return descriptions[Math.floor(Math.random() * descriptions.length)];
+};
+
+// Function to enhance user data with location and description
+const enhanceUserData = (users: User[]): User[] => {
+  return users.map(user => ({
+    ...user,
+    location: getRandomLocation(),
+    description: getRoleDescription(user.role)
+  }));
+};
+
 const categories = [
   'All',
   'Designer',
@@ -25,6 +89,43 @@ const categories = [
   'Marketer',
   'Consultant',
 ];
+
+// Role icons mapping
+const roleIcons: Record<string, string> = {
+  'Designer': '🎨',
+  'Developer': '💻',
+  'Photographer': '📸',
+  'Marketer': '📊',
+  'Consultant': '💼',
+  'Default': '👤'
+};
+
+// Company icons mapping  
+const companyIcons: Record<string, string> = {
+  'Skill': '🎯',
+  'Kavya': '🏢',
+  'Islington': '🎓',
+  'TechCorp': '⚡',
+  'DesignStudio': '🎨',
+  'CreativeLens': '📷',
+  'BusinessPro': '💼',
+  'MarketingPro': '📈',
+  'CodeCraft': '💻',
+  'ArtStudio': '🎭',
+  'PhotoPro': '📸',
+  'StrategyCorp': '🏆',
+  'Default': '🏢'
+};
+
+// Function to get role icon
+const getRoleIcon = (role: string): string => {
+  return roleIcons[role] || roleIcons['Default'];
+};
+
+// Function to get company icon
+const getCompanyIcon = (company: string): string => {
+  return companyIcons[company] || companyIcons['Default'];
+};
 
 const Homepage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -66,7 +167,8 @@ const Homepage: React.FC = () => {
       });
       
       const data: ApiResponse = response.data;
-      setUsers(data.users || []);
+      const enhancedUsers = enhanceUserData(data.users || []);
+      setUsers(enhancedUsers);
       setTotalCount(data.totalCount || 0);
     } catch (err: any) {
       console.error('Error fetching users:', err);
@@ -120,7 +222,7 @@ const Homepage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-300 p-0 m-0">
+    <div className="homepage-wrapper">
       <header>
         <div className="header-content">
           <h1 className="header-title">
@@ -183,15 +285,15 @@ const Homepage: React.FC = () => {
             <>
               <div className="result-count">
                 {loading ? (
-                  <span className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600 mr-2"></div>
+                  <span style={{ display: 'flex', alignItems: 'center' }}>
+                    <span className="loading-spinner"></span>
                     Searching...
                   </span>
                 ) : (
                   `${totalCount} result${totalCount !== 1 ? 's' : ''} found`
                 )}
                 {(debouncedSearch || selectedCategory !== 'All') && (
-                  <span className="ml-2 text-sm text-gray-500">
+                  <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: '#9ca3af' }}>
                     {debouncedSearch && `for "${debouncedSearch}"`}
                     {debouncedSearch && selectedCategory !== 'All' && ' '}
                     {selectedCategory !== 'All' && `in ${selectedCategory}`}
@@ -218,8 +320,21 @@ const Homepage: React.FC = () => {
                       onClick={() => {/* TODO: navigate to user profile */}}
                     >
                       <div className="username">{user.username}</div>
-                      <div className="role">{user.role}</div>
-                      <div className="company">{user.company}</div>
+                      <div className="role">
+                        <span className="role-icon">{getRoleIcon(user.role)}</span>
+                        {user.role}
+                      </div>
+                      <div className="company">
+                        <span className="company-icon">{getCompanyIcon(user.company)}</span>
+                        {user.company}
+                      </div>
+                      <div className="location">
+                        <span>📍</span>
+                        {user.location}
+                      </div>
+                      <div className="description">
+                        {user.description}
+                      </div>
                     </div>
                   ))}
                 </div>
