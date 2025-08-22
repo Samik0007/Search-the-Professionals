@@ -104,9 +104,6 @@ const Homepage: React.FC = () => {
 
           <nav className="nav-menu">
             <button className="nav-button">Home</button>
-            <button className="nav-button">My Network</button>
-            <button className="nav-button">Jobs</button>
-            <button className="nav-button">Messaging</button>
             <button 
               className="nav-button"
               onClick={() => window.location.href = "/profile"}

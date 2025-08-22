@@ -7,7 +7,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+  background: linear-gradient(135deg, #fff5f5 0%, #fde8e8 100%);
   min-height: 100vh;
   line-height: 1.6;
 }
@@ -39,16 +39,16 @@ header {
 }
 
 .header-title {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 600;
   color: #1e293b;
   margin: 0;
 }
 
 .header-title .user-name {
   text-transform: uppercase;
-  color: #2563eb;
-  font-weight: 800;
+  color: #ef4444;
+  font-weight: 700;
 }
 
 /* Navigation Styles */
@@ -70,16 +70,23 @@ header {
 }
 
 .nav-button:hover {
-  color: #2563eb;
+  color: #ef4444;
 }
 
 .logout-button {
-  color: #dc2626 !important;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white !important;
   font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+  transition: all 0.2s ease;
 }
 
 .logout-button:hover {
-  color: #b91c1c !important;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
 }
 
 /* Main Content Styles */
@@ -94,7 +101,7 @@ header {
 .search-filter-section {
   background: white;
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1.5rem;
   margin-bottom: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
@@ -102,14 +109,25 @@ header {
 .search-filter-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+  max-width: 100%;
 }
 
 @media (min-width: 768px) {
   .search-filter-container {
     flex-direction: row;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .search-filter-section {
+    padding: 1rem;
+  }
+  
+  .search-filter-container {
+    gap: 0.75rem;
   }
 }
 
@@ -127,8 +145,8 @@ header {
 
 .search-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .search-input::placeholder {
@@ -161,10 +179,10 @@ header {
 }
 
 .category-button.active {
-  background-color: #2563eb;
+  background-color: #ef4444;
   color: white;
-  border-color: #2563eb;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  border-color: #ef4444;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
 }
 
 /* Results Section */
@@ -206,7 +224,7 @@ header {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #ef4444, #f87171);
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -214,7 +232,7 @@ header {
 .user-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-  border-color: #3b82f6;
+  border-color: #ef4444;
 }
 
 .user-card:hover::before {
@@ -229,7 +247,7 @@ header {
 }
 
 .user-card .role {
-  color: #2563eb;
+  color: #ef4444;
   font-weight: 600;
   font-size: 1rem;
   margin-bottom: 0.25rem;
